@@ -1,5 +1,5 @@
 title: "jev-ultrafast-mirror-709"
-description: "High availability mirror and network topology specifications for browser-use/jev-ultrafast"
+description: "官方高可用开源镜像中心与全息拓扑枢纽"
 theme: jekyll-theme-cayman
 plugins:
   - jekyll-relative-links
