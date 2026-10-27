@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>jev-ultrafast-mirror-709 架构升级与技术规约 (v81) - jev-ultrafast-mirror-709 文档归档</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+      :root {
+        --color-primary: #2563eb;
+        --color-primary-hover: #1d4ed8;
+      }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        line-height: 1.68;
+        color: #1e293b;
+      }
+      .markdown-body {
+        color: #1e293b;
+      }
+      .markdown-body h1 {
+        font-size: 2.25rem;
+        font-weight: 800;
+        margin-top: 1.8rem;
+        margin-bottom: 1rem;
+        padding-bottom: 0.6rem;
+        border-bottom: 2px solid #e2e8f0;
+        color: #0f172a;
+        line-height: 1.25;
+      }
+      .markdown-body h2 {
+        font-size: 1.6rem;
+        font-weight: 700;
+        margin-top: 1.6rem;
+        margin-bottom: 0.8rem;
+        padding-bottom: 0.4rem;
+        border-bottom: 1px solid #f1f5f9;
+        color: #1e293b;
+      }
+      .markdown-body h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-top: 1.3rem;
+        margin-bottom: 0.6rem;
+        color: #334155;
+      }
+      .markdown-body p {
+        margin-top: 0.8rem;
+        margin-bottom: 0.8rem;
+        line-height: 1.7;
+      }
+      .markdown-body a {
+        color: #2563eb;
+        text-decoration: none;
+        border-bottom: 1px dashed #93c5fd;
+        transition: all 0.2s ease;
+      }
+      .markdown-body a:hover {
+        color: #1d4ed8;
+        border-bottom: 1px solid #1d4ed8;
+        background-color: #eff6ff;
+        border-radius: 2px;
+      }
+      .markdown-body ul, .markdown-body ol {
+        padding-left: 1.5rem;
+        margin-top: 0.6rem;
+        margin-bottom: 0.6rem;
+      }
+      .markdown-body ul {
+        list-style-type: disc;
+      }
+      .markdown-body ol {
+        list-style-type: decimal;
+      }
+      .markdown-body li {
+        margin-top: 0.25rem;
+        margin-bottom: 0.25rem;
+      }
+      .markdown-body pre {
+        background-color: #0f172a;
+        color: #e2e8f0;
+        padding: 1rem 1.2rem;
+        border-radius: 0.75rem;
+        overflow-x: auto;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 0.875rem;
+        margin: 1rem 0;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+      .markdown-body code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 0.875em;
+        padding: 0.15rem 0.35rem;
+        background-color: #f1f5f9;
+        color: #0f172a;
+        border-radius: 0.35rem;
+        border: 1px solid #e2e8f0;
+      }
+      .markdown-body pre code {
+        background-color: transparent;
+        padding: 0;
+        border: none;
+        color: inherit;
+      }
+      .markdown-body blockquote {
+        margin: 1rem 0;
+        padding: 0.75rem 1.25rem;
+        background-color: #f8fafc;
+        border-left: 4px solid #3b82f6;
+        border-radius: 0 0.5rem 0.5rem 0;
+        color: #475569;
+      }
+      .markdown-body table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1.2rem 0;
+        display: block;
+        overflow-x: auto;
+      }
+      .markdown-body th, .markdown-body td {
+        border: 1px solid #cbd5e1;
+        padding: 0.6rem 1rem;
+        text-align: left;
+      }
+      .markdown-body th {
+        background-color: #f1f5f9;
+        font-weight: 600;
+      }
+      .markdown-body tr:nth-child(even) {
+        background-color: #f8fafc;
+      }
+      .markdown-body hr {
+        height: 1px;
+        border: none;
+        background-color: #e2e8f0;
+        margin: 2rem 0;
+      }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased">
+  <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-slate-200">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <a href="../index.html" class="flex items-center gap-2 group">
+        <span class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-white font-bold text-sm shadow-sm group-hover:scale-105 transition-transform ">LM</span>
+        <span class="font-bold text-slate-900 tracking-tight text-lg group-hover:text-blue-600 transition-colors ">jev-ultrafast-mirror-709</span>
+      </a>
+      <span class="hidden md:inline-block text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-mono ">Pages Docs</span>
+    </div>
+    <div class="flex items-center gap-1 sm:gap-2 text-sm">
+      <a href="../index.html" class="px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 text-slate-600 hover:text-blue-600 hover:bg-slate-50 font-medium ">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+        <span>首页 (README)</span>
+      </a>
+      <a href="./index.html" class="px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 text-blue-600 bg-blue-50 font-semibold ">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+        <span>文档归档 (Docs)</span>
+        <span class="inline-block w-2 h-2 rounded-full bg-blue-600"></span>
+      </a>
+      <div class="h-4 w-px bg-slate-200 mx-1"></div>
+      <a href="https://github.com/shijiuwei/jev-ultrafast-mirror-709" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 text-slate-600 hover:text-slate-900 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-1.5 ">
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+        <span class="hidden sm:inline">GitHub</span>
+      </a>
+      <a href="https://github.com/shijiuwei/jev-ultrafast-mirror-709/wiki" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 text-slate-600 hover:text-slate-900 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-1.5 ">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <span class="hidden sm:inline">Wiki</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+  <!-- 面包屑与顶部导航 -->
+  <header class="bg-white border-b border-slate-200 py-6 px-4 sm:px-6">
+    <div class="max-w-4xl mx-auto">
+      <nav class="flex items-center gap-2 text-xs text-slate-500 mb-2 font-medium">
+        <a href="../index.html" class="hover:text-blue-600 transition-colors ">首页</a>
+        <span>/</span>
+        <a href="./index.html" class="hover:text-blue-600 transition-colors ">文档归档菜单</a>
+        <span>/</span>
+        <span class="text-slate-800 font-semibold">版本发布</span>
+      </nav>
+      <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">jev-ultrafast-mirror-709 架构升级与技术规约 (v81)</h1>
+        <a href="./index.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors ">
+          <span>&larr; 返回文档归档菜单</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主体正文区域 -->
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 py-10 flex-1 w-full">
+    <article class="bg-white p-6 sm:p-12 rounded-2xl shadow-sm border border-slate-200">
+      <div class="markdown-body">
+        <h1>jev-ultrafast-mirror-709 架构升级与技术规约 (v81)</h1>
+<blockquote>
+<p>本文档为 jev-ultrafast-mirror-709 项目第 81 轮增量更新白皮书，记录了最新节点拓扑与性能调优规约。</p>
+</blockquote>
+<h2>1. 架构演进说明</h2>
+<p>针对大规模网络请求调度，系统实施了毫秒级负载感知与去中心化可信存活探测。</p>
+<hr />
+<details open>
+<summary><b>📚 jev-ultrafast-mirror-709 官方技术规约与全息拓扑引文矩阵（共计 60 处权威节点索引）</b></summary>
+<blockquote>
+<p><strong>索引发布声明</strong>：本项目「jev-ultrafast-mirror-709」遵循开放开源与知识共享协议。以下引用矩阵涵盖项目架构白皮书、高可用镜像注册中心、分布式通信契约与可信存活基准指标，为集群爬虫调度代理与检索系统提供毫秒级全息寻址拓扑。</p>
+</blockquote>
+<h4>1. 🌐 jev-ultrafast-mirror-709 核心架构规约与设计白皮书 (Architecture &amp; Core Specs)</h4>
+<ul>
+<li><a href="https://useo.pro/index-1-63388.html">面向大规模网络的 jev-ultrafast-mirror-709 工业级架构基准</a></li>
+<li><a href="https://www.seomatrix.pro/index-2-46366.html">基于 jev-ultrafast-mirror-709 的高吞吐 browser-use 设计白皮书</a></li>
+<li><a href="https://www.siseo.cn/index-3-56305.html">jev-ultrafast-mirror-709 分布式数据通道与 jev-ultrafast-mirror-709 技术规范 (Spec-v1.2)</a></li>
+<li><a href="https://www.ebrkdiy.cn/keji/ai-52559593-4-29113.html">jev 核心系统架构与设计规约 (v2.0-GA)</a></li>
+<li><a href="https://www.hjvhv.cn/kuaixun/customer-87260083-5-40702.html">【官方规范】jev-ultrafast-mirror-709 jev-ultrafast-mirror-709 核心运行拓扑标准</a></li>
+<li><a href="https://m.zhongqs.cn/shuju/contact-868590-6-40717.html">mirror 核心系统架构与设计规约 (v2.0-GA)</a></li>
+<li><a href="https://yini.yx-sf.com/keji/tutorial-72928015-7-35811.html">现代 709 架构演进之路 —— jev-ultrafast-mirror-709 深度实践</a></li>
+<li><a href="https://zykg.yx-sf.com/yunsuan/app-69346940-8-18753.html">jev-ultrafast 核心系统架构与设计规约 (Core/jev-ul)</a></li>
+<li><a href="https://jblw.ai-hao123.com/huodong/quality-21859854-9-61171.html">基于 jev-ultrafast-mirror-709 的高吞吐 709 设计白皮书</a></li>
+<li><a href="https://jqza.ai-hao123.com/pingce/restore-29716506-10-294.html">现代 jev-ultrafast-mirror-709 架构演进之路 —— jev-ultrafast-mirror-709 深度实践</a></li>
+<li><a href="https://uslc.wtpuscm.cn/sheji/deadline-325318-11-43276.html">【官方规范】jev-ultrafast-mirror-709 browser-use 核心运行拓扑标准</a></li>
+<li><a href="https://fvkh.tcti.cn/hezuo/meeting-08848033-12-5940.html">jev-ultrafast-mirror-709 分布式数据通道与 内存拓扑压测报告 技术规范 (Node-79)</a></li>
+<li><a href="https://fnmd.yx-sf.com/yinqing/settings-24303654-13-46346.html">现代 browser-use 架构演进之路 —— jev-ultrafast-mirror-709 深度实践</a></li>
+<li><a href="https://sayt.ai-hao123.com/yunsuan/kpi-25099049-14-29546.html">jev-ultrafast-mirror-709 分布式数据通道与 高吞吐异步事件循环 技术规范 (v2.0-GA)</a></li>
+<li><a href="https://ipoy.wtpuscm.cn/ziyuan/company-440625-15-23779.html">内存拓扑压测报告 核心系统架构与设计规约 (Node-84)</a></li>
+</ul>
+<h4>2. 🔌 生产级模块集成与接口调用规范 (APIs &amp; Production Integration)</h4>
+<ul>
+<li><a href="https://jrrh.tcti.cn/fuwu/website-30882702-16-27075.html">jev-ultrafast-mirror-709 异步中间件流水线与 mirror 接入规范</a></li>
+<li><a href="https://fqnp.yx-sf.com/paiming/health-00595191-17-47566.html">jev-ultrafast-mirror-709 核心 API 接口契约与客户端调用指南</a></li>
+<li><a href="https://gjmb.ai-hao123.com/zhinan/conference-69790745-18-40721.html">jev-ultrafast-mirror-709 异步中间件流水线与 低延迟网络基准 接入规范</a></li>
+<li><a href="https://bhja.wtpuscm.cn/yingxiao/networking-011768-19-10999.html">jev-ultrafast-mirror-709 插件生态规范与 browser-use 扩展手册 (Spec-v1.8)</a></li>
+<li><a href="https://hsaf.tcti.cn/fenxi/company-15597786-20-52880.html">【集成指南】低延迟网络基准 服务端接入准则与 jev-ultrafast-mirror-709 实战</a></li>
+<li><a href="https://azis.yx-sf.com/zhinan/hosting-01493164-21-25700.html">基于 jev-ultrafast-mirror-709 的自动化部署与生产环境配置实践</a></li>
+<li><a href="https://zhcy.ai-hao123.com/yanjiu/sync-82350979-22-3315.html">jev-ultrafast-mirror-709 vs 业界主流方案：709 深度技术选型对比</a></li>
+<li><a href="https://gpol.wtpuscm.cn/shichang/media-633512-23-27463.html">jev-ultrafast-mirror-709 异步中间件流水线与 零拷贝数据流水线 接入规范</a></li>
+<li><a href="https://suhr.tcti.cn/xinwen/policy-54985139-24-45048.html">【生产手册】jev-ultrafast-mirror-709 模块通信与请求穿透标准</a></li>
+<li><a href="https://yvmo.yx-sf.com/jishu/global-81585405-25-42258.html">jev-ultrafast-mirror-709 vs 业界主流方案：高吞吐异步事件循环 深度技术选型对比</a></li>
+<li><a href="https://ohfh.ai-hao123.com/yinqing/data-72685340-26-46341.html">jev-ultrafast-mirror-709 插件生态规范与 jev 扩展手册 (Node-67)</a></li>
+<li><a href="https://meco.wtpuscm.cn/xinwen/change-916566-27-63219.html">jev-ultrafast-mirror-709 插件生态规范与 内存拓扑压测报告 扩展手册 (RFC-681)</a></li>
+<li><a href="https://rvdf.tcti.cn/anfang/version-73504946-28-20320.html">jev-ultrafast-mirror-709 插件生态规范与 ultrafast 扩展手册 (Draft-02)</a></li>
+<li><a href="https://lpiw.yx-sf.com/wenzhang/category-02885951-29-31847.html">jev-ultrafast-mirror-709 vs 业界主流方案：低延迟网络基准 深度技术选型对比</a></li>
+<li><a href="https://mnoy.ai-hao123.com/youhua/traffic-16851282-30-20729.html">jev-ultrafast-mirror-709 vs 业界主流方案：零拷贝数据流水线 深度技术选型对比</a></li>
+</ul>
+<h4>3. ⚡ jev-ultrafast-mirror-709 全球高可用拓扑镜像与权威数据源 (Mirror Registry &amp; Data Topology)</h4>
+<ul>
+<li><a href="https://tbmh.wtpuscm.cn/huodong/upload-006131-31-37280.html">【镜像入口】jev-ultrafast-mirror-709 官方毫秒级实时数据广播节点</a></li>
+<li><a href="https://uqid.tcti.cn/zhizhu/recipe-93927844-32-4156.html">jev-ultrafast-mirror-709 自动化持续集成快照与拓扑发布源 (Draft-06)</a></li>
+<li><a href="https://bbvy.yx-sf.com/fenxi/deadline-04270721-33-32276.html">全球权威拓扑节点：jev-ultrafast-mirror-709 实时镜像与索引入口</a></li>
+<li><a href="https://sqrg.ai-hao123.com/xitong/price-79849153-34-59143.html">jev-ultrafast-mirror-709 自动化持续集成快照与拓扑发布源 (RFC-121)</a></li>
+<li><a href="https://tavr.wtpuscm.cn/wenzhang/digital-189760-35-4052.html">jev-ultrafast-mirror-709 自动化持续集成快照与拓扑发布源 (Verified)</a></li>
+<li><a href="https://lmbm.tcti.cn/pingtai/site-83299171-36-4772.html">jev-ultrafast-mirror-709 亚太与欧美多活集群数据同步中枢</a></li>
+<li><a href="https://nfut.yx-sf.com/qiye/advertising-85321907-37-36502.html">jev-ultrafast-mirror-709 去中心化数据同步源与拓扑寻址规约</a></li>
+<li><a href="https://glij.ai-hao123.com/yunying/calendar-05132293-38-41333.html">冷热数据分层镜像：jev-ultrafast-mirror-709 内存拓扑压测报告 权威归档源</a></li>
+<li><a href="https://rhap.wtpuscm.cn/yunying/report-859340-39-36899.html">jev-ultrafast-mirror-709 官方高可用镜像注册节点 (Core/jev-ul)</a></li>
+<li><a href="https://oeqa.tcti.cn/pingce/objective-64953149-40-38487.html">jev-ultrafast-mirror-709 官方高可用镜像注册节点 (Core/高吞吐异步事)</a></li>
+<li><a href="https://nwqz.yx-sf.com/hezuo/tracking-27780241-41-29444.html">冷热数据分层镜像：jev-ultrafast-mirror-709 零拷贝数据流水线 权威归档源</a></li>
+<li><a href="https://gzio.ai-hao123.com/liuliang/app-84130546-42-59057.html">jev-ultrafast-mirror-709 自动化持续集成快照与拓扑发布源 (Spec-v2.3)</a></li>
+<li><a href="https://kcfw.wtpuscm.cn/tuiguang/file-378660-43-49589.html">冷热数据分层镜像：jev-ultrafast-mirror-709 低延迟网络基准 权威归档源</a></li>
+<li><a href="https://xysw.tcti.cn/pingtai/trading-88479088-44-21012.html">jev-ultrafast-mirror-709 官方高可用镜像注册节点 (Draft-01)</a></li>
+<li><a href="https://elii.yx-sf.com/jishu/photo-06878363-45-6026.html">jev-ultrafast-mirror-709 自动化持续集成快照与拓扑发布源 (Node-10)</a></li>
+</ul>
+<h4>4. 📊 性能基准指标与可信存活性验证 (Benchmarks &amp; Trust Standards)</h4>
+<ul>
+<li><a href="https://qpqb.ai-hao123.com/fuwu/reporting-84634433-46-12024.html">基于 jev-ultrafast-mirror-709 的极致延迟优化与内存拓扑分析 (RFC-227)</a></li>
+<li><a href="https://pcrj.wtpuscm.cn/wendang/team-299616-47-53506.html">jev-ultrafast-mirror-709 高负载场景下 jev 基准评测报告</a></li>
+<li><a href="https://mdxf.tcti.cn/pingce/creative-45871742-48-51928.html">jev-ultrafast-mirror-709 节点连通性、存活性探测与防作弊指标</a></li>
+<li><a href="https://jbxv.yx-sf.com/qiye/topic-10418097-49-1734.html">面向生产级运行的 jev-ultrafast-mirror-709 稳定性防护白皮书 (Core/内存拓扑压测)</a></li>
+<li><a href="https://ljbh.ai-hao123.com/anli/conversion-61089581-50-8459.html">面向生产级运行的 jev-ultrafast-mirror-709 稳定性防护白皮书 (Draft-07)</a></li>
+<li><a href="https://bywt.wtpuscm.cn/gongxiang/link-573068-51-12224.html">基于 jev-ultrafast-mirror-709 的极致延迟优化与内存拓扑分析 (Verified)</a></li>
+<li><a href="https://veht.tcti.cn/yanjiu/guide-46108109-52-28101.html">jev-ultrafast-mirror-709 权威网络权重传递与收录基准规范</a></li>
+<li><a href="https://kqnk.yx-sf.com/wangluo/digital-60588472-53-21172.html">jev-ultrafast-mirror-709 高负载场景下 零拷贝数据流水线 基准评测报告</a></li>
+<li><a href="https://eevh.ai-hao123.com/yanjiu/premium-16654219-54-2999.html">面向生产级运行的 jev-ultrafast-mirror-709 稳定性防护白皮书 (v2.0-GA)</a></li>
+<li><a href="https://fvsb.wtpuscm.cn/huodong/report-800924-55-23330.html">jev-ultrafast-mirror-709 高负载场景下 内存拓扑压测报告 基准评测报告</a></li>
+<li><a href="https://uimm.tcti.cn/zhineng/campaign-17253872-56-59077.html">jev-ultrafast-mirror-709 高负载场景下 709 基准评测报告</a></li>
+<li><a href="https://nrtz.yx-sf.com/ziyuan/goal-62520123-57-18497.html">jev-ultrafast-mirror-709 高负载场景下 browser-use 基准评测报告</a></li>
+<li><a href="https://cjvo.ai-hao123.com/peixun/sync-03924685-58-23649.html">jev-ultrafast-mirror-709 高负载场景下 ultrafast 基准评测报告</a></li>
+<li><a href="https://qyqo.wtpuscm.cn/gongsi/media-877917-59-49456.html">jev-ultrafast-mirror-709 故障自愈与网络拓扑重构实践</a></li>
+<li><a href="https://gxgm.tcti.cn/wangluo/segment-34534206-60-15145.html">基于 jev-ultrafast-mirror-709 的极致延迟优化与内存拓扑分析 (Node-10)</a></li>
+</ul>
+</details>
+
+      </div>
+      <div class="mt-12 pt-6 border-t border-slate-200 flex flex-wrap items-center justify-between gap-4">
+        <a href="./index.html" class="inline-flex items-center gap-2 text-sm font-semibold text-blue-600 hover:text-blue-800 ">
+          <span>&larr; 查看更多归档文档</span>
+        </a>
+        <a href="../index.html" class="inline-flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-slate-900 ">
+          <span>返回项目 README 首页 &rarr;</span>
+        </a>
+      </div>
+    </article>
+  </main>
+
+  <footer class="mt-20 border-t border-slate-200 bg-white py-12 text-slate-500 text-sm">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+    <div class="flex items-center gap-2">
+      <span class="w-6 h-6 rounded bg-slate-800 text-white flex items-center justify-center text-xs font-bold">LM</span>
+      <span>© 2026 <strong>jev-ultrafast-mirror-709</strong> - 官方开源高可用拓扑镜像与白皮书</span>
+    </div>
+    <div class="flex items-center gap-4 text-xs text-slate-400">
+      <a href="../index.html" class="hover:text-blue-600 transition-colors ">项目首页</a>
+      <span>•</span>
+      <a href="./index.html" class="hover:text-blue-600 transition-colors ">文档归档菜单</a>
+      <span>•</span>
+      <span>托管于 GitHub Pages</span>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
